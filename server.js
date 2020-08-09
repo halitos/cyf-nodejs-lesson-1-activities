@@ -17,19 +17,21 @@ const songs = [
   {
     id: 1,
     title: "Under Pressure",
-    singer: "Queen & David",
+    artist: "Queen & David",
   },
   {
     id: 2,
     title: "Wild World",
-    singer: "Cat Stevens",
+    artist: "Cat Stevens",
   },
   {
     id: 3,
     title: "Nothing Else Matters",
-    singer: "Metallica",
+    artist: "Metallica",
   },
 ];
+
+//------------ get all songs----------------
 
 app.get("/songs", (request, response) => {
   response.json({
@@ -37,12 +39,27 @@ app.get("/songs", (request, response) => {
   });
 });
 
+//--------- Request song with id Num------------
+
 app.get("/songs/:id", (request, response) => {
   let id = Number(request.params.id);
   let mySong = songs.find((song) => song.id === id);
   response.json({
     msg: `The client made a request for song with the id: ${id}`,
     mySong,
+  });
+});
+
+//-----------Detect Client Querries to filter songs------------
+
+app.get("songs/", (req, res) => {
+  let limit = Number(req.query.limit);
+  if (limit) {
+    songs = songs.slice(0, limit);
+  }
+  res.json({
+    msg: `The client made a request for ${songs.length} songs`,
+    songs,
   });
 });
 
