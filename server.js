@@ -39,7 +39,7 @@ app.get("/songs", (request, response) => {
   });
 });
 
-//--------- Request song with id Num------------
+//--------- request song with id Num in Resourse Path------------
 
 app.get("/songs/:id", (request, response) => {
   let id = Number(request.params.id);
@@ -50,16 +50,21 @@ app.get("/songs/:id", (request, response) => {
   });
 });
 
-//-----------Detect Client Querries to filter songs------------
+//-----------detect Querry to filter songs------------
 
 app.get("songs/", (req, res) => {
   let limit = Number(req.query.limit);
-  if (limit) {
-    songs = songs.slice(0, limit);
+  let artist = req.query.artist;
+  let selectedSongs = songs;
+  if (!artist == undefined) {
+    selectedSongs.filter((song) => song.artist.includes(artist));
   }
-  res.json({
-    msg: `The client made a request for ${songs.length} songs`,
-    songs,
+  if (!limit == undefined) {
+    selectedSongs = selectedSongs.slice(0, limit);
+  }
+  res.send({
+    msg: `The client made a request for ${selectedSongs.length} songs`,
+    selectedSongs,
   });
 });
 
