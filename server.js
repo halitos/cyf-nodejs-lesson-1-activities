@@ -52,20 +52,24 @@ app.get("/songs/:id", (request, response) => {
 
 //-----------detect Querry to filter songs------------
 
-app.get("songs/", (req, res) => {
+app.get("/songs", (req, res) => {
   let limit = Number(req.query.limit);
-  let artist = req.query.artist;
+  let artist = req.query.artist.toLowerCase();
   let selectedSongs = songs;
-  if (!artist == undefined) {
-    selectedSongs.filter((song) => song.artist.includes(artist));
+  if (artist !== undefined) {
+    selectedSongs.filter((song) => song.artist.toLowerCase().includes(artist));
   }
-  if (!limit == undefined) {
+  if (limit !== undefined) {
     selectedSongs = selectedSongs.slice(0, limit);
   }
-  res.send({
-    msg: `The client made a request for ${selectedSongs.length} songs`,
-    selectedSongs,
-  });
+  if (selectedSongs !== undefined) {
+    res.json({
+      msg: `The client made a request for ${selectedSongs.length} songs`,
+      selectedSongs,
+    });
+  } else {
+    res.status(404).send("not found");
+  }
 });
 
 app.listen(port, () => {
