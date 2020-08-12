@@ -52,7 +52,7 @@ app.get("/songs/:id", (request, response) => {
 
 //-----------detect Querry to filter songs------------
 
-app.get("/songs", (req, res) => {
+app.get("/song", (req, res) => {
   let limit = Number(req.query.limit);
   let artist = req.query.artist.toLowerCase();
   let selectedSongs = songs;
